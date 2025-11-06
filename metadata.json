@@ -1,0 +1,5 @@
+{
+  "name": "Odoo Sales Dashboard & Chatbot",
+  "description": "An interactive dashboard and AI chatbot to visualize and query Odoo sales data. The system features multi-company support with a secure login to ensure users only see data for their assigned company.",
+  "requestFramePermissions": []
+}
