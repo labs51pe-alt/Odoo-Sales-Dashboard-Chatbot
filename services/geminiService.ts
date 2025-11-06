@@ -1,50 +1,49 @@
-
 import { GoogleGenAI } from "@google/genai";
-import type { SalesData, Company } from '../types';
+import type { Company, SalesData } from '../types';
 
-// Assume process.env.API_KEY is configured in the environment
-const API_KEY = process.env.API_KEY;
+// FIX: Initialize the GoogleGenAI client.
+// According to the guidelines, the API key must be sourced from process.env.API_KEY.
+// It is assumed to be pre-configured and available in the execution environment.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
-if (!API_KEY) {
-  console.warn("API_KEY environment variable not set. Using a mock response.");
-}
-
-const ai = API_KEY ? new GoogleGenAI({ apiKey: API_KEY }) : null;
-
+/**
+ * Sends a user's query along with company and sales data to the Gemini API for analysis.
+ *
+ * @param userInput The user's question about the sales data.
+ * @param company The company for which the data is being analyzed.
+ * @param salesData The sales data to be analyzed by the AI.
+ * @returns A promise that resolves to the AI-generated text response.
+ */
 export const askSalesAssistant = async (
-  query: string,
+  userInput: string,
   company: Company,
   salesData: SalesData
 ): Promise<string> => {
-  if (!ai) {
-    // Mock response for development if API key is not available
-    return new Promise(resolve => setTimeout(() => {
-      resolve(`This is a mock response for your question: "${query}". For ${company.name}, the total sales are $${salesData.totalSales.toLocaleString()}.`);
-    }, 1000));
-  }
-  
-  const prompt = `
-    You are a helpful sales data assistant for the company: "${company.name}".
-    Your tone should be professional, concise, and helpful.
-    Analyze the following sales data and answer the user's question.
-    Do not make up information that is not present in the data.
-    If the data doesn't contain the answer, say so politely.
-
-    **Sales Data (in JSON format):**
-    ${JSON.stringify(salesData, null, 2)}
-
-    **User's Question:**
-    ${query}
-  `;
+  // FIX: Create a detailed system instruction to provide context to the AI model.
+  const systemInstruction = `You are an expert sales data analyst and assistant for the company "${company.name}".
+Your role is to provide clear, concise, and insightful answers about the company's sales performance based on the JSON data provided.
+When asked about data, refer to the provided JSON. Do not invent or hallucinate data.
+Format your answers in a user-friendly way. Use Markdown for lists, bolding, and italics where appropriate to improve readability.
+Analyze the following sales data:
+${JSON.stringify(salesData, null, 2)}
+`;
 
   try {
+    // FIX: Call the Gemini API using ai.models.generateContent as per the guidelines.
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
-      contents: prompt,
+      // Using 'gemini-2.5-flash' as it is recommended for basic text tasks.
+      model: "gemini-2.5-flash",
+      contents: userInput,
+      config: {
+        systemInstruction: systemInstruction,
+      },
     });
+
+    // FIX: Extract the response text directly from the .text property as per guidelines.
     return response.text;
   } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    return "Sorry, I encountered an error while processing your request. Please try again later.";
+    console.error("Error communicating with the Gemini API:", error);
+    // Propagate a user-friendly error to be handled by the calling component.
+    throw new Error("Failed to get a response from the AI assistant. Please try again later.");
   }
 };

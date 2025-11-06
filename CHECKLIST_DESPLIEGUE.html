@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checklist de Despliegue - Odoo Sales Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .step-checkbox:checked + label .step-text {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        .step-checkbox:checked + label .step-icon {
+            background-color: #10b981;
+            border-color: #10b981;
+            color: white;
+        }
+        code {
+            background-color: #e5e7eb;
+            color: #1f2937;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .dark code {
+            background-color: #374151;
+            color: #e5e7eb;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200">
+
+    <div class="container mx-auto max-w-4xl p-4 sm:p-8">
+
+        <header class="text-center mb-12">
+            <div class="flex items-center justify-center gap-4">
+                 <svg class="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                <h1 class="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">Guía de Despliegue</h1>
+            </div>
+            <p class="mt-4 text-lg text-gray-600 dark:text-gray-400">Tu checklist completo para lanzar el Odoo Sales Dashboard.</p>
+        </header>
+
+        <!-- Fase 1: Odoo -->
+        <section class="mb-12 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 border-b pb-4 dark:border-gray-700 flex items-center gap-3">
+                <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">1</div>
+                Fase 1: Configuración de Odoo
+            </h2>
+            <ul class="space-y-4">
+                <li class="flex items-start">
+                    <input type="checkbox" id="step1-1" class="hidden step-checkbox">
+                    <label for="step1-1" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text">
+                            <strong class="font-semibold text-gray-900 dark:text-white">Generar Clave API.</strong> Inicia sesión en Odoo, ve a <code class="text-sm">Mi Perfil > Seguridad de la Cuenta</code> y haz clic en <code class="text-sm">Nueva Clave API</code>.
+                        </div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step1-2" class="hidden step-checkbox">
+                    <label for="step1-2" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text">
+                            <strong class="font-semibold text-gray-900 dark:text-white">Recopilar Credenciales.</strong> Guarda en un lugar seguro los siguientes 4 datos que usarás en la siguiente fase:
+                            <ul class="list-disc list-inside mt-2 pl-2 text-gray-600 dark:text-gray-400">
+                                <li>URL de Odoo: <code>https://vida.facturaclic.pe</code></li>
+                                <li>Base de Datos: <code>vida_master</code></li>
+                                <li>Usuario: <code>soporte@facturaclic.pe</code></li>
+                                <li>Clave API generada: <code>6306e...</code></li>
+                            </ul>
+                        </div>
+                    </label>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Fase 2: Supabase -->
+        <section class="mb-12 p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 border-b pb-4 dark:border-gray-700 flex items-center gap-3">
+                <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">2</div>
+                Fase 2: Despliegue del Backend en Supabase
+            </h2>
+            <ul class="space-y-4">
+                 <li class="flex items-start">
+                    <input type="checkbox" id="step2-1" class="hidden step-checkbox">
+                    <label for="step2-1" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Preparar Entorno.</strong> En tu terminal, crea una carpeta y vincula tu proyecto de Supabase: <br> <code class="block mt-2 text-sm">mkdir mi-dashboard-backend && cd mi-dashboard-backend</code> <br> <code class="block mt-1 text-sm">supabase login</code> <br> <code class="block mt-1 text-sm">supabase link --project-ref ixhbgkimmzgfwehbbloa</code></div>
+                    </label>
+                </li>
+                 <li class="flex items-start">
+                    <input type="checkbox" id="step2-2" class="hidden step-checkbox">
+                    <label for="step2-2" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Crear Función.</strong> Ejecuta <code>supabase functions new get-odoo-sales</code>.</div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step2-3" class="hidden step-checkbox">
+                    <label for="step2-3" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Copiar Código.</strong> Reemplaza el contenido de <code>supabase/functions/get-odoo-sales/index.ts</code> con el código que te proporcioné.</div>
+                    </label>
+                </li>
+                 <li class="flex items-start">
+                    <input type="checkbox" id="step2-4" class="hidden step-checkbox">
+                    <label for="step2-4" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Verificar IDs de Compañía.</strong> Abre <code>index.ts</code> y ajusta los números en <code>COMPANY_NAME_TO_ODOO_ID_MAP</code> para que coincidan con los IDs reales de las compañías en tu Odoo.</div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step2-5" class="hidden step-checkbox">
+                    <label for="step2-5" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Guardar Secretos (¡Crítico!).</strong> Ejecuta estos 4 comandos en tu terminal para guardar tus credenciales de Odoo de forma segura: <br>
+                        <code class="block mt-2 text-sm">supabase secrets set ODOO_URL="..."</code> <br>
+                        <code class="block mt-1 text-sm">supabase secrets set ODOO_DB="..."</code> <br>
+                        <code class="block mt-1 text-sm">supabase secrets set ODOO_USER="..."</code> <br>
+                        <code class="block mt-1 text-sm">supabase secrets set ODOO_API_KEY="..."</code>
+                        </div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step2-6" class="hidden step-checkbox">
+                    <label for="step2-6" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Función.</strong> Ejecuta <code>supabase functions deploy get-odoo-sales --no-verify-jwt</code>.</div>
+                    </label>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Fase 3: Vercel -->
+        <section class="p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+            <h2 class="text-2xl font-bold mb-6 border-b pb-4 dark:border-gray-700 flex items-center gap-3">
+                 <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">3</div>
+                Fase 3: Despliegue del Frontend en Vercel
+            </h2>
+            <ul class="space-y-4">
+                <li class="flex items-start">
+                    <input type="checkbox" id="step3-1" class="hidden step-checkbox">
+                    <label for="step3-1" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Subir a GitHub.</strong> Crea un repositorio en GitHub y sube todos los archivos de tu aplicación frontend.</div>
+                    </label>
+                </li>
+                 <li class="flex items-start">
+                    <input type="checkbox" id="step3-2" class="hidden step-checkbox">
+                    <label for="step3-2" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Importar en Vercel.</strong> Inicia sesión en Vercel, crea un nuevo proyecto e importa tu repositorio de GitHub.</div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step3-3" class="hidden step-checkbox">
+                    <label for="step3-3" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Configurar Clave API de Gemini.</strong> En la configuración de tu proyecto en Vercel, ve a <code class="text-sm">Settings > Environment Variables</code>. Añade una nueva variable con el nombre <code>VITE_API_KEY</code> y pega tu clave API de Google Gemini.</div>
+                    </label>
+                </li>
+                 <li class="flex items-start">
+                    <input type="checkbox" id="step3-4" class="hidden step-checkbox">
+                    <label for="step3-4" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Frontend.</strong> Haz clic en el botón <code class="text-sm">Deploy</code> en Vercel.</div>
+                    </label>
+                </li>
+                <li class="flex items-start">
+                    <input type="checkbox" id="step3-5" class="hidden step-checkbox">
+                    <label for="step3-5" class="flex items-start cursor-pointer">
+                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">¡Probar todo!</strong> Abre la URL de Vercel, inicia sesión y verifica que el dashboard muestre datos reales de Odoo y que el Asistente IA responda a tus preguntas.</div>
+                    </label>
+                </li>
+            </ul>
+        </section>
+
+        <!-- Conclusión -->
+        <footer class="text-center mt-12">
+            <div class="p-8 bg-green-100 dark:bg-green-900/50 rounded-2xl">
+                 <h3 class="text-2xl font-bold text-green-800 dark:text-green-300">¡Felicitaciones!</h3>
+                 <p class="mt-2 text-green-700 dark:text-green-400">Si has marcado todas las casillas, tu dashboard está en vivo y conectado. ¡Excelente trabajo!</p>
+            </div>
+        </footer>
+
+    </div>
+
+</body>
+</html>
