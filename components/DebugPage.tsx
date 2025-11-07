@@ -9,6 +9,18 @@ const DebugPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Extract the Supabase project reference from the URL constant.
+  const getSupabaseProjectRef = () => {
+    try {
+      const url = new URL(SUPABASE_FUNCTION_BASE_URL);
+      const parts = url.hostname.split('.');
+      return parts[0];
+    } catch (e) {
+      return null;
+    }
+  };
+  const supabaseProjectRef = getSupabaseProjectRef();
+
   const handleRunTest = async () => {
     setIsLoading(true);
     setError(null);
@@ -58,9 +70,10 @@ const DebugPage: React.FC = () => {
                 <ul className="mt-2 text-sm list-disc list-inside">
                     {missingSecrets.map(secret => <li key={secret}><code className="font-semibold">{secret}</code></li>)}
                 </ul>
-                {/* FIX: Cast `import.meta` to `any` to prevent TypeScript error for Vite env variables. */}
                 <p className="mt-4 text-sm text-red-700 dark:text-red-300">
-                    Go to your <a href={`https://supabase.com/dashboard/project/${(import.meta as any).env.VITE_SUPABASE_PROJECT_REF}/settings/functions`} target="_blank" rel="noopener noreferrer" className="underline hover:text-red-500">Supabase Secrets Settings</a> and add them. 
+                    Go to your {supabaseProjectRef ? 
+                    <a href={`https://supabase.com/dashboard/project/${supabaseProjectRef}/settings/functions`} target="_blank" rel="noopener noreferrer" className="underline hover:text-red-500">Supabase Secrets Settings</a>
+                    : "Supabase Secrets Settings"} and add them. 
                     <strong>After adding them, you MUST re-deploy your functions using the terminal.</strong>
                 </p>
               </div>
