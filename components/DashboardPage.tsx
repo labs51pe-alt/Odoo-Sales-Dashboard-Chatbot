@@ -5,6 +5,7 @@ import { useSalesData } from '../hooks/useSalesData';
 import { KpiCard } from './common/KpiCard';
 
 const RedeployCommand = "supabase functions deploy get-odoo-sales --no-verify-jwt";
+const SupabaseSecretsURL = "https://supabase.com/dashboard/project/ixhbgkimmzgfwehbbloa/functions/secrets";
 
 const copyToClipboard = (text: string) => {
   navigator.clipboard.writeText(text).then(() => {
@@ -15,56 +16,83 @@ const copyToClipboard = (text: string) => {
   });
 };
 
-// A new, simplified guide focusing on the single action needed.
-const FinalActionRequired: React.FC = () => {
+// A new, definitive troubleshooting wizard to guide the user through the final fix.
+const TroubleshootingWizard: React.FC<{ error: string }> = ({ error }) => {
   return (
-    <div className="p-6 sm:p-8 mx-auto mt-8 max-w-3xl bg-white rounded-lg shadow-2xl border-2 border-blue-500 dark:bg-gray-800 dark:border-blue-600">
+    <div className="p-6 sm:p-8 mx-auto mt-8 max-w-4xl bg-white rounded-lg shadow-2xl border-t-4 border-red-500 dark:bg-gray-800 dark:border-red-600">
       <div className="text-center">
-        <svg className="w-16 h-16 mx-auto text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 18h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>
-        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">One Final Step to Connect to Odoo</h3>
+        <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        <h3 className="text-2xl font-bold text-gray-900 dark:text-white mt-4">Connection to Odoo Failed: Let's Fix It</h3>
         <p className="mt-2 text-gray-600 dark:text-gray-400">
-          Your Odoo credentials are set, but the backend function needs a quick refresh to use them.
-          This is a one-time action.
+          This error almost always means there's a small configuration mismatch. Let's walk through the checklist to find it.
         </p>
+         <div className="p-3 mt-4 text-sm text-red-700 bg-red-100 rounded-lg dark:bg-red-900 dark:text-red-300">
+            <strong>Error details:</strong> {error}
+        </div>
       </div>
 
       <div className="mt-8 space-y-6">
-        <div>
-          <h4 className="font-semibold text-lg flex items-center gap-2">
+        {/* Step 1: Verify Secrets */}
+        <div className="p-4 border rounded-lg dark:border-gray-700">
+          <h4 className="font-semibold text-lg flex items-center gap-3">
             <span className="flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full font-bold">1</span>
-            <span>Open your Terminal</span>
+            <span>Verify Supabase Secrets</span>
           </h4>
-          <p className="pl-10 text-sm text-gray-500 dark:text-gray-400">Navigate to your project folder (`mi-dashboard-backend`).</p>
+          <p className="pl-11 mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Ensure the following four secrets exist with the <strong>exact</strong> names below.
+          </p>
+          <ul className="pl-11 mt-2 space-y-1 text-sm list-disc list-inside">
+            <li><code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">ODOO_URL</code></li>
+            <li><code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">ODOO_DB</code></li>
+            <li><code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">ODOO_USER</code></li>
+            <li><code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">ODOO_API_KEY</code></li>
+          </ul>
+           <a href={SupabaseSecretsURL} target="_blank" rel="noopener noreferrer" className="inline-block mt-3 ml-11 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none">
+            Open Supabase Secrets
+          </a>
         </div>
 
-        <div>
-           <h4 className="font-semibold text-lg flex items-center gap-2">
+        {/* Step 2: Verify Company IDs */}
+        <div className="p-4 border rounded-lg dark:border-gray-700">
+          <h4 className="font-semibold text-lg flex items-center gap-3">
             <span className="flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full font-bold">2</span>
+            <span>Verify Odoo Company IDs</span>
+          </h4>
+          <p className="pl-11 mt-1 text-sm text-gray-500 dark:text-gray-400">
+            Open the file <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">supabase/functions/get-odoo-sales/index.ts</code>. Double-check that the numbers in the <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">COMPANY_NAME_TO_ODOO_ID_MAP</code> section match the real IDs from your Odoo instance.
+          </p>
+        </div>
+
+        {/* Step 3: Re-deploy */}
+        <div className="p-4 border rounded-lg dark:border-gray-700">
+           <h4 className="font-semibold text-lg flex items-center gap-3">
+            <span className="flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full font-bold">3</span>
             <span>Run the Refresh Command</span>
           </h4>
-          <p className="pl-10 text-sm text-gray-500 dark:text-gray-400">This command re-deploys your function so it can read the credentials you've set.</p>
-          <div className="flex items-center gap-2 p-3 mt-2 ml-10 bg-gray-100 rounded-md dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-700">
+          <p className="pl-11 mt-1 text-sm text-gray-500 dark:text-gray-400">After verifying the settings, you <strong>must</strong> re-deploy the function for the changes to take effect. Run this command in your terminal:</p>
+          <div className="flex items-center gap-2 p-3 mt-2 ml-11 bg-gray-100 rounded-md dark:bg-gray-900 ring-1 ring-gray-200 dark:ring-gray-700">
             <code className="flex-grow text-sm font-mono text-gray-700 dark:text-gray-300">{RedeployCommand}</code>
             <button
               onClick={() => copyToClipboard(RedeployCommand)}
-              className="flex-shrink-0 px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 dark:focus:ring-offset-gray-900"
+              className="flex-shrink-0 px-4 py-2 text-xs font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700"
             >
               Copy
             </button>
           </div>
         </div>
-        
-        <div>
-            <h4 className="font-semibold text-lg flex items-center gap-2">
-                <span className="flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full font-bold">3</span>
-                <span>Refresh This Page</span>
+
+         {/* Step 4: Refresh Page */}
+        <div className="p-4 border rounded-lg dark:border-gray-700">
+            <h4 className="font-semibold text-lg flex items-center gap-3">
+                <span className="flex items-center justify-center w-8 h-8 text-white bg-green-600 rounded-full font-bold">4</span>
+                <span>Refresh and Load Data</span>
             </h4>
-             <p className="pl-10 text-sm text-gray-500 dark:text-gray-400">After the command finishes successfully in your terminal, click the button below.</p>
+             <p className="pl-11 mt-1 text-sm text-gray-500 dark:text-gray-400">After the command finishes successfully in your terminal, click the button below.</p>
              <button
                 onClick={() => window.location.reload()}
-                className="w-full px-4 py-3 mt-3 font-bold text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 dark:focus:ring-offset-gray-800 md:w-auto md:ml-10"
+                className="w-full px-4 py-3 mt-3 font-bold text-white bg-green-600 rounded-md hover:bg-green-700 md:w-auto md:ml-11"
               >
-                Load Live Data
+                Reload Dashboard
               </button>
         </div>
       </div>
@@ -84,8 +112,8 @@ const DashboardPage: React.FC = () => {
   }
 
   if (error) {
-    // Show the new, simplified guide instead of the old one.
-    return <FinalActionRequired />;
+    // Show the new, definitive troubleshooting wizard.
+    return <TroubleshootingWizard error={error} />;
   }
   
   if (!salesData) {
