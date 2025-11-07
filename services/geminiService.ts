@@ -1,9 +1,9 @@
 import type { Company, SalesData } from '../types';
+import { SUPABASE_FUNCTION_BASE_URL, ASK_GEMINI_FUNCTION_NAME } from '../constants';
 
 // The Gemini API call is now proxied through a secure Supabase Edge Function.
 // The API key is stored securely as a Supabase secret and is never exposed to the browser.
-// NOTE: We derive the new function URL from the existing constant to minimize file changes.
-const ASK_ASSISTANT_URL = "https://ixhbgkimmzgfwehbbloa.supabase.co/functions/v1/ask-gemini";
+const ASK_ASSISTANT_URL = `${SUPABASE_FUNCTION_BASE_URL}${ASK_GEMINI_FUNCTION_NAME}`;
 
 
 /**

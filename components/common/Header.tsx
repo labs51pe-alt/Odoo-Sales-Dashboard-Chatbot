@@ -2,15 +2,21 @@
 import React from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { COMPANIES } from '../../constants';
+import type { View } from '../../App';
 
 interface HeaderProps {
-    currentView: 'dashboard' | 'chatbot';
-    setCurrentView: (view: 'dashboard' | 'chatbot') => void;
+    currentView: View;
+    setCurrentView: (view: View) => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
     const { user, logout } = useAuth();
     const companyName = user ? COMPANIES.find(c => c.id === user.companyId)?.name : 'Odoo';
+
+    const navButtonStyle = (view: View) => 
+        `px-3 py-2 text-sm font-medium rounded-md ${currentView === view 
+            ? 'text-white bg-blue-600' 
+            : 'text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`;
 
     return (
         <header className="bg-white shadow-md dark:bg-gray-800">
@@ -22,17 +28,14 @@ const Header: React.FC<HeaderProps> = ({ currentView, setCurrentView }) => {
                             <span className="text-xl font-bold text-gray-800 dark:text-white">{companyName}</span>
                         </div>
                         <nav className="hidden md:flex md:space-x-4">
-                            <button
-                                onClick={() => setCurrentView('dashboard')}
-                                className={`px-3 py-2 text-sm font-medium rounded-md ${currentView === 'dashboard' ? 'text-white bg-blue-600' : 'text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-                            >
+                            <button onClick={() => setCurrentView('dashboard')} className={navButtonStyle('dashboard')}>
                                 Dashboard
                             </button>
-                            <button
-                                onClick={() => setCurrentView('chatbot')}
-                                className={`px-3 py-2 text-sm font-medium rounded-md ${currentView === 'chatbot' ? 'text-white bg-blue-600' : 'text-gray-500 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'}`}
-                            >
+                            <button onClick={() => setCurrentView('chatbot')} className={navButtonStyle('chatbot')}>
                                 AI Assistant
+                            </button>
+                             <button onClick={() => setCurrentView('debug')} className={navButtonStyle('debug')}>
+                                System Debug
                             </button>
                         </nav>
                     </div>

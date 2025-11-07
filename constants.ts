@@ -1,14 +1,17 @@
+// constants.ts
 import type { Company } from './types';
 
 // =================================================================================
-// ACTION: I have updated this URL to point to your Supabase project.
-// You now need to create a Supabase Edge Function named 'get-odoo-sales'.
-// The function will be called like: .../get-odoo-sales/empresa-a
+// ACTION: These URLs point to your Supabase project functions.
+// 'get-odoo-sales' fetches data, and 'check-secrets' is a new diagnostic tool.
 // =================================================================================
-export const SUPABASE_FUNCTION_BASE_URL = "https://ixhbgkimmzgfwehbbloa.supabase.co/functions/v1/get-odoo-sales/";
+export const SUPABASE_FUNCTION_BASE_URL = "https://ixhbgkimmzgfwehbbloa.supabase.co/functions/v1/";
+export const ODOO_SALES_FUNCTION_NAME = 'get-odoo-sales';
+export const CHECK_SECRETS_FUNCTION_NAME = 'check-secrets';
+export const ASK_GEMINI_FUNCTION_NAME = 'ask-gemini';
+
 
 // Set this to `false` to use live data from your Supabase function.
-// I have set this to `false` for you to activate the live connection.
 export const USE_MOCK_DATA = false;
 
 

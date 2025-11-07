@@ -2,8 +2,13 @@ import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useSalesData } from '../hooks/useSalesData';
 import { KpiCard } from './common/KpiCard';
+import type { View } from '../App';
 
-const DashboardPage: React.FC = () => {
+interface DashboardPageProps {
+  setCurrentView: (view: View) => void;
+}
+
+const DashboardPage: React.FC<DashboardPageProps> = ({ setCurrentView }) => {
   const { user } = useAuth();
   const { data: salesData, isLoading, error } = useSalesData(user?.companyId);
 
@@ -29,59 +34,24 @@ const DashboardPage: React.FC = () => {
     );
   }
 
-  // ACTION: Updated the hyper-specific error screen for the "ID mapping" issue.
-  if (error && error.includes('No Odoo ID mapping found')) {
-      return (
-          <div className="flex items-center justify-center h-[calc(100vh-120px)]">
-              <div className="w-full max-w-2xl p-8 space-y-6 text-center bg-white border-2 border-yellow-300 rounded-lg shadow-2xl dark:bg-gray-800 dark:border-yellow-700">
-                  <div className="flex flex-col items-center">
-                      <svg className="w-16 h-16 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                      <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-yellow-200">Final Step: Update and Synchronize</h2>
-                      <p className="mt-2 text-gray-600 dark:text-yellow-300">
-                          We've located the issue! The code on the server is outdated. Please follow these two steps to fix it.
-                      </p>
-                  </div>
-                  <div className="p-4 space-y-4 text-left bg-gray-100 rounded-lg dark:bg-gray-700">
-                      <div>
-                        <p className="mb-2 font-semibold text-gray-800 dark:text-gray-200">Step 1: Update Your Local File</p>
-                        <p className="text-sm text-gray-600 dark:text-gray-400">
-                          The file <code className="px-1 text-xs font-semibold bg-gray-200 rounded dark:bg-gray-600 dark:text-yellow-200">supabase/functions/get-odoo-sales/index.ts</code> on your computer is likely outdated.
-                          Please ensure you have replaced its entire content with the new code I have just provided.
-                        </p>
-                      </div>
-                      <div>
-                        <p className="mb-2 font-semibold text-gray-800 dark:text-gray-200">Step 2: Send the Update to the Server</p>
-                        <p className="mb-4 text-sm text-gray-600 dark:text-gray-400">
-                            Once your file is updated, run the command below in your terminal. This will synchronize the server with your correct company list.
-                        </p>
-                        <div className="flex items-center p-3 font-mono text-sm text-gray-800 bg-gray-200 rounded-md dark:bg-gray-900 dark:text-gray-300">
-                            <span className="flex-grow">supabase functions deploy get-odoo-sales --no-verify-jwt</span>
-                            <button
-                                onClick={() => navigator.clipboard.writeText('supabase functions deploy get-odoo-sales --no-verify-jwt')}
-                                className="px-3 py-1 ml-4 text-xs font-semibold text-white bg-blue-600 rounded-md hover:bg-blue-700"
-                            >
-                                Copy
-                            </button>
-                        </div>
-                      </div>
-                  </div>
-                   <button
-                      onClick={() => window.location.reload()}
-                      className="w-full px-4 py-2 mt-4 font-bold text-white bg-green-600 rounded-lg hover:bg-green-700"
-                  >
-                      I've run the command, now Reload Dashboard
-                  </button>
-              </div>
-          </div>
-      );
-  }
-  
   if (error) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-120px)]">
-         <div className="p-6 text-center bg-red-100 border-2 border-red-300 rounded-lg dark:bg-red-900 dark:border-red-700">
-            <h2 className="text-xl font-bold text-red-800 dark:text-red-200">Error Loading Data</h2>
-            <p className="mt-2 text-red-600 dark:text-red-300">{error}</p>
+         <div className="w-full max-w-lg p-8 text-center bg-white border-2 border-red-300 rounded-lg shadow-2xl dark:bg-gray-800 dark:border-red-700">
+             <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-red-200">Failed to Load Dashboard Data</h2>
+            <p className="mt-2 text-gray-600 dark:text-red-300">
+                A connection error occurred. Please use the diagnostic tool to identify and fix the issue.
+            </p>
+             <p className="p-3 mt-4 font-mono text-sm text-red-700 bg-red-100 rounded-md dark:bg-red-900 dark:text-red-300">
+                {error}
+            </p>
+            <button
+                onClick={() => setCurrentView('debug')}
+                className="w-full px-4 py-2 mt-6 font-bold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
+            >
+                Go to System Debug Tool
+            </button>
         </div>
       </div>
     );

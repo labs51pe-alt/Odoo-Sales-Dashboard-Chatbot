@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { SalesData } from '../types';
-import { SUPABASE_FUNCTION_BASE_URL, USE_MOCK_DATA, MOCK_SALES_DATA } from '../constants';
+import { SUPABASE_FUNCTION_BASE_URL, USE_MOCK_DATA, MOCK_SALES_DATA, ODOO_SALES_FUNCTION_NAME } from '../constants';
 
 interface UseSalesDataReturn {
   data: SalesData | null;
@@ -32,14 +32,9 @@ export const useSalesData = (companyId: string | undefined): UseSalesDataReturn 
         return;
       }
       
-      if(SUPABASE_FUNCTION_BASE_URL.includes('<your-project-ref>')) {
-        setError("Please update the 'SUPABASE_FUNCTION_BASE_URL' in constants.ts with your actual Supabase function URL.");
-        setIsLoading(false);
-        return;
-      }
-
       try {
-        const response = await fetch(`${SUPABASE_FUNCTION_BASE_URL}${companyId}`);
+        const functionUrl = `${SUPABASE_FUNCTION_BASE_URL}${ODOO_SALES_FUNCTION_NAME}/${companyId}`;
+        const response = await fetch(functionUrl);
         // Try to parse the body regardless of status, as Supabase functions
         // send a JSON body even for errors.
         const responseBody = await response.json();
