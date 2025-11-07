@@ -1,60 +1,49 @@
 // supabase/functions/check-secrets/index.ts
-// This is a diagnostic function to help debug connection issues.
-// Its only purpose is to check if the required environment variables (secrets)
-// are accessible within the Supabase Edge Function environment.
+// This function checks for the presence of required environment variables (secrets)
+// in the Supabase Edge Function environment. It helps diagnose configuration issues.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
+// Supabase provides the 'Deno' global object in its Edge Function environment.
 declare const Deno: any;
 
-// The list of secrets the application expects to be set.
-const REQUIRED_SECRETS = [
-  "ODOO_URL",
-  "ODOO_DB",
-  "ODOO_USER",
-  "ODOO_API_KEY",
-  "GEMINI_API_KEY",
-];
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
 
-serve(async (_req) => {
-  // Handle CORS preflight requests.
-  if (_req.method === 'OPTIONS') {
-    return new Response('ok', {
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-      }
-    });
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response('ok', { headers: corsHeaders });
   }
 
   try {
-    const secretsStatus: Record<string, boolean> = {};
+    // List of secrets that the application expects to be available.
+    const requiredSecrets = [
+        "GEMINI_API_KEY", 
+        // Add other required secrets here, e.g., "ODOO_API_KEY"
+    ];
 
-    for (const secretName of REQUIRED_SECRETS) {
-      // Deno.env.get() returns the value of the secret, or undefined if not found.
-      // We convert this to a boolean to indicate presence.
-      secretsStatus[secretName] = Deno.env.get(secretName) !== undefined;
+    const status: Record<string, { present: boolean; value?: string }> = {};
+
+    for (const secretName of requiredSecrets) {
+        const secretValue = Deno.env.get(secretName);
+        status[secretName] = {
+            present: !!secretValue,
+            // For security, we only show a snippet or confirmation, not the full key.
+            value: secretValue ? `Present (ends with ...${secretValue.slice(-4)})` : "Not Found"
+        };
     }
 
-    // Return a JSON response with the status of each secret.
-    return new Response(
-      JSON.stringify(secretsStatus), 
-      {
-        headers: { 
-          'Content-Type': 'application/json',
-          'Access-Control-Allow-Origin': '*' 
-        },
-      }
-    );
+    return new Response(JSON.stringify(status), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
 
   } catch (error) {
-    // In case of an unexpected error within the function itself.
+    console.error("Function Error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { 
-        'Content-Type': 'application/json',
-        'Access-Control-Allow-Origin': '*' 
-      },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 });
