@@ -45,7 +45,7 @@ const DashboardPage: React.FC = () => {
                       <div>
                         <p className="mb-2 font-semibold text-gray-800 dark:text-gray-200">Step 1: Update Your Local File</p>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          I have provided you with the corrected code for the file <code className="px-1 text-xs bg-gray-200 rounded dark:bg-gray-600">supabase/functions/get-odoo-sales/index.ts</code>.
+                          I have provided you with the corrected code for the file <code className="px-1 text-xs font-semibold bg-gray-200 rounded dark:bg-gray-600 dark:text-yellow-200">supabase/functions/get-odoo-sales/index.ts</code>.
                           Please ensure you have replaced the entire content of that file on your computer with the new version.
                         </p>
                       </div>
