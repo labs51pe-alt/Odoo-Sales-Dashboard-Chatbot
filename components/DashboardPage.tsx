@@ -15,10 +15,18 @@ const DashboardPage: React.FC = () => {
   }
 
   if (error) {
-    return <div className="p-4 text-center text-red-700 bg-red-100 rounded-lg dark:bg-red-900 dark:text-red-200">
-        <h3 className="font-bold">Error</h3>
-        <p>{error}</p>
-    </div>;
+    return (
+      <div className="p-6 mx-auto mt-10 max-w-2xl text-center text-red-800 bg-red-100 rounded-lg shadow-md border border-red-300 dark:bg-red-900 dark:text-red-200 dark:border-red-700">
+        <h3 className="text-xl font-bold">Failed to Load Dashboard Data</h3>
+        <p className="mt-2">The following error occurred while trying to connect to Odoo:</p>
+        <pre className="p-3 mt-4 font-mono text-sm text-left bg-red-50 rounded-md dark:bg-gray-800 dark:text-red-100 whitespace-pre-wrap">
+          {error}
+        </pre>
+        <p className="mt-4 text-sm">
+          <strong>Next Steps:</strong> Please check your Supabase secrets (API Key, User, DB, URL) and verify the Company IDs in your <code>get-odoo-sales</code> function.
+        </p>
+      </div>
+    );
   }
   
   if (!salesData) {

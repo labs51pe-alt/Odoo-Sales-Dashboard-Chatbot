@@ -40,13 +40,26 @@ export const useSalesData = (companyId: string | undefined): UseSalesDataReturn 
 
       try {
         const response = await fetch(`${SUPABASE_FUNCTION_BASE_URL}${companyId}`);
+        // Try to parse the body regardless of status, as Supabase functions
+        // send a JSON body even for errors.
+        const responseBody = await response.json();
+
         if (!response.ok) {
-          throw new Error(`Failed to fetch data: ${response.statusText}`);
+          // If the JSON body has a specific 'error' message from our function, use it.
+          // Otherwise, fall back to a generic error.
+          const errorMessage = responseBody.error || `Request failed with status ${response.status}`;
+          throw new Error(errorMessage);
         }
-        const salesData: SalesData = await response.json();
+        
+        // If the response was OK, the body is our sales data.
+        const salesData: SalesData = responseBody;
         setData(salesData);
+
       } catch (err) {
-        setError(err instanceof Error ? err.message : 'An unknown error occurred');
+        // The error message from the `throw` above will be caught here.
+        // We also catch potential JSON parsing errors if the response is not JSON.
+        const displayError = err instanceof Error ? err.message : 'An unknown error occurred';
+        setError(displayError);
         console.error("Error fetching sales data:", err);
       } finally {
         setIsLoading(false);
