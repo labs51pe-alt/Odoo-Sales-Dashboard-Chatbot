@@ -4,7 +4,7 @@ import { COMPANIES } from '../../constants';
 
 interface HeaderProps {
   currentPage: string;
-  onNavigate: (page: 'dashboard' | 'chatbot' | 'debug') => void;
+  onNavigate: (page: 'dashboard' | 'chatbot') => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
@@ -34,9 +34,6 @@ const Header: React.FC<HeaderProps> = ({ currentPage, onNavigate }) => {
                 </span>
                 <span onClick={() => onNavigate('chatbot')} className={getLinkClass('chatbot')}>
                   AI Assistant
-                </span>
-                <span onClick={() => onNavigate('debug')} className={getLinkClass('debug')}>
-                  Debug
                 </span>
               </div>
             </div>

@@ -4,11 +4,10 @@ import LoginPage from './components/LoginPage';
 import DashboardPage from './components/DashboardPage';
 import Header from './components/common/Header';
 import ChatbotPage from './components/ChatbotPage';
-import DebugPage from './components/DebugPage';
 
 const App: React.FC = () => {
   const { user } = useAuth();
-  const [currentPage, setCurrentPage] = useState<'dashboard' | 'chatbot' | 'debug'>('dashboard');
+  const [currentPage, setCurrentPage] = useState<'dashboard' | 'chatbot'>('dashboard');
 
   if (!user) {
     return <LoginPage />;
@@ -23,7 +22,6 @@ const App: React.FC = () => {
       <main className="p-4 sm:p-6 lg:p-8">
         {currentPage === 'dashboard' && <DashboardPage />}
         {currentPage === 'chatbot' && <ChatbotPage />}
-        {currentPage === 'debug' && <DebugPage />}
       </main>
     </div>
   );

@@ -15,6 +15,7 @@ import {
   Legend,
 } from 'chart.js';
 import { COMPANIES } from '../constants';
+import FinalDiagnosticReport from './common/FinalDiagnosticReport';
 
 ChartJS.register(
   CategoryScale,
@@ -47,20 +48,20 @@ const DashboardPage: React.FC = () => {
   }
 
   if (error) {
+    // Render the new interactive diagnostic report on error.
+    return <FinalDiagnosticReport errorDetails={error} />;
+  }
+
+  if (!data || data.orderCount === 0) {
     return (
         <div className="flex items-center justify-center h-[calc(100vh-120px)]">
             <div className="p-8 text-center bg-white rounded-lg shadow-xl dark:bg-gray-800">
-                <svg className="w-16 h-16 mx-auto text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-white">Failed to Load Data</h2>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">{error}</p>
-                <p className="mt-2 text-sm text-gray-500 dark:text-gray-500">Please check the Supabase function logs for more details and ensure the Odoo service is reachable.</p>
+                <svg className="w-16 h-16 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-white">No Sales Data Found</h2>
+                <p className="mt-2 text-gray-600 dark:text-gray-400">There are no sale orders for {company?.name} in the selected period.</p>
             </div>
         </div>
     );
-  }
-
-  if (!data) {
-    return <div className="text-center text-gray-600 dark:text-gray-400">No sales data available for {company?.name}.</div>;
   }
   
   const formatCurrency = (value: number) => new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(value);
