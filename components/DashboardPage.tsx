@@ -38,15 +38,15 @@ const DashboardPage: React.FC = () => {
                       <svg className="w-16 h-16 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
                       <h2 className="mt-4 text-2xl font-bold text-gray-800 dark:text-yellow-200">Final Step: Update and Synchronize</h2>
                       <p className="mt-2 text-gray-600 dark:text-yellow-300">
-                          We've located the issue! Your local code is outdated. Please follow these two steps to fix it.
+                          We've located the issue! The code on the server is outdated. Please follow these two steps to fix it.
                       </p>
                   </div>
                   <div className="p-4 space-y-4 text-left bg-gray-100 rounded-lg dark:bg-gray-700">
                       <div>
                         <p className="mb-2 font-semibold text-gray-800 dark:text-gray-200">Step 1: Update Your Local File</p>
                         <p className="text-sm text-gray-600 dark:text-gray-400">
-                          I have provided you with the corrected code for the file <code className="px-1 text-xs font-semibold bg-gray-200 rounded dark:bg-gray-600 dark:text-yellow-200">supabase/functions/get-odoo-sales/index.ts</code>.
-                          Please ensure you have replaced the entire content of that file on your computer with the new version.
+                          The file <code className="px-1 text-xs font-semibold bg-gray-200 rounded dark:bg-gray-600 dark:text-yellow-200">supabase/functions/get-odoo-sales/index.ts</code> on your computer is likely outdated.
+                          Please ensure you have replaced its entire content with the new code I have just provided.
                         </p>
                       </div>
                       <div>
