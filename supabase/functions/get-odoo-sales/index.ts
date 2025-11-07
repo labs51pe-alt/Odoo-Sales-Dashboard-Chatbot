@@ -215,13 +215,15 @@ function parseValueNode(node: Element): any {
             return Array.from(typeNode.querySelectorAll("data > value") || []).map(parseValueNode);
         case 'struct':
             const obj: Record<string, any> = {};
-            for (const member of Array.from(typeNode.querySelectorAll("member"))) {
+            // FIX: Use `forEach` directly on the NodeListOf. This has better type inference
+            // than `Array.from` in some TS/Deno environments and ensures `member` is typed as `Element`.
+            typeNode.querySelectorAll("member").forEach(member => {
                 const name = member.querySelector("name")?.textContent || '';
                 const value = member.querySelector("value");
                 if (name && value) {
                     obj[name] = parseValueNode(value);
                 }
-            }
+            });
             return obj;
         case 'nil': return null;
         default: return typeNode.textContent;
