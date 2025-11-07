@@ -1,0 +1,1 @@
+full contents of GUIA_TERMINAL.md
