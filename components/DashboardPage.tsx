@@ -52,16 +52,33 @@ const TroubleshootingWizard: React.FC<{ error: string }> = ({ error }) => {
           </a>
         </div>
 
-        {/* Step 2: Verify Company IDs */}
+        {/* Step 2: Verify Company IDs - New Visual Guide */}
         <div className="p-4 border rounded-lg dark:border-gray-700">
           <h4 className="font-semibold text-lg flex items-center gap-3">
             <span className="flex items-center justify-center w-8 h-8 text-white bg-blue-600 rounded-full font-bold">2</span>
-            <span>Verify Odoo Company IDs</span>
+            <span>Verify Odoo Company IDs (The "Translator")</span>
           </h4>
-          <p className="pl-11 mt-1 text-sm text-gray-500 dark:text-gray-400">
-            Open the file <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">supabase/functions/get-odoo-sales/index.ts</code>. Double-check that the numbers in the <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">COMPANY_NAME_TO_ODOO_ID_MAP</code> section match the real IDs from your Odoo instance.
-          </p>
+          <div className="pl-11 mt-2 space-y-3 text-sm text-gray-500 dark:text-gray-400">
+            <p>
+              Your app uses simple names like <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">empresa-a</code>, but Odoo's database uses numbers (e.g., <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">1</code>, <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">5</code>). The code in your Supabase function acts as a translator. You must tell it which number corresponds to which name.
+            </p>
+            <p className="font-semibold text-gray-700 dark:text-gray-300">How to find the correct ID in Odoo:</p>
+            <ol className="list-decimal list-inside space-y-2">
+              <li>Go to your Odoo dashboard, then navigate to <strong>Settings &rarr; Companies</strong>.</li>
+              <li>Click on a company, for example, <strong>"Vida SAC"</strong>.</li>
+              <li>Look at the URL in your browser's address bar. Find the part that says <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">id=NUMBER</code>. That number is the ID.</li>
+              <li className="p-2 bg-gray-100 rounded dark:bg-gray-900">
+                <strong>Example URL:</strong><br/>
+                <code className="break-all text-xs">.../web#id=<span className="font-bold text-lg text-red-500">5</span>&amp;model=res.company&amp;...</code><br />
+                In this example, the ID for the company is <strong className="text-red-500">5</strong>.
+              </li>
+            </ol>
+            <p>
+              Now, open the file <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">supabase/functions/get-odoo-sales/index.ts</code> in your project and make sure the numbers in the <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">COMPANY_NAME_TO_ODOO_ID_MAP</code> section are correct.
+            </p>
+          </div>
         </div>
+
 
         {/* Step 3: Re-deploy */}
         <div className="p-4 border rounded-lg dark:border-gray-700">
