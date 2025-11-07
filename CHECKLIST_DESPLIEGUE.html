@@ -70,7 +70,7 @@
                                 <li>URL de Odoo: <code>https://vida.facturaclic.pe</code></li>
                                 <li>Base de Datos: <code>vida_master</code></li>
                                 <li>Usuario: <code>soporte@facturaclic.pe</code></li>
-                                <li>Clave API generada: <code>6306e...</code></li>
+                                <li>Clave API generada: <code>[TU_CLAVE_API]</code></li>
                             </ul>
                         </div>
                     </label>
@@ -86,46 +86,82 @@
             </h2>
             <ul class="space-y-4">
                  <li class="flex items-start">
-                    <input type="checkbox" id="step2-1" class="hidden step-checkbox">
-                    <label for="step2-1" class="flex items-start cursor-pointer">
+                    <input type="checkbox" id="step2-1-new" class="hidden step-checkbox">
+                    <label for="step2-1-new" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Preparar Entorno.</strong> En tu terminal, crea una carpeta y vincula tu proyecto de Supabase: <br> <code class="block mt-2 text-sm">mkdir mi-dashboard-backend && cd mi-dashboard-backend</code> <br> <code class="block mt-1 text-sm">supabase login</code> <br> <code class="block mt-1 text-sm">supabase link --project-ref ixhbgkimmzgfwehbbloa</code></div>
-                    </label>
-                </li>
-                 <li class="flex items-start">
-                    <input type="checkbox" id="step2-2" class="hidden step-checkbox">
-                    <label for="step2-2" class="flex items-start cursor-pointer">
-                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Crear Funciones.</strong> Ejecuta estos dos comandos para crear la estructura de ambas funciones: <br>
-                        <code class="block mt-2 text-sm">supabase functions new get-odoo-sales</code>
-                        <code class="block mt-1 text-sm">supabase functions new ask-gemini</code>
+                        <div class="step-text">
+                            <strong class="font-semibold text-gray-900 dark:text-white">Paso 2.1: Instalar Supabase CLI.</strong> (Solo se hace una vez). Tu Mac necesita esta herramienta para hablar con Supabase.
+                            <div class="p-3 my-2 text-sm text-yellow-800 rounded-lg bg-yellow-50 dark:bg-gray-800 dark:text-yellow-300" role="alert">
+                              Primero, instala Homebrew (el "app store" para desarrolladores de Mac), si no lo tienes ya.
+                            </div>
+                            <code class="block mt-2 text-sm">/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code>
+                            <div class="p-3 my-2 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+                              Ahora, usa Homebrew para instalar la herramienta de Supabase.
+                            </div>
+                            <code class="block mt-2 text-sm">brew install supabase/tap/supabase</code>
                         </div>
                     </label>
                 </li>
-                <li class="flex items-start">
+                
+                <!-- NEW PERMISSION BLOCK -->
+                <li class="border-4 border-red-500 rounded-xl p-4 bg-red-50 dark:bg-red-900/20">
+                    <div class="flex items-start">
+                        <input type="checkbox" id="step2-2-new" class="hidden step-checkbox">
+                        <label for="step2-2-new" class="flex items-start cursor-pointer w-full">
+                            <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
+                            <div class="step-text w-full">
+                                <strong class="text-lg font-bold text-red-700 dark:text-red-400">¡ALTO! Paso 2.2: Solución al Error de Permisos</strong>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Si ves el error <code class="text-xs">"privileges"</code>, es porque estás usando la cuenta incorrecta en la terminal. Sigue este plan EXACTO:</p>
+                                
+                                <div class="mt-4 space-y-3">
+                                    <div class="flex items-start p-2 rounded-md bg-gray-100 dark:bg-gray-700/50">
+                                        <div class="font-bold text-blue-600 dark:text-blue-400 mr-3">1.</div>
+                                        <div><strong>AVERIGUA</strong> el correo del <strong>Dueño (`Owner`)</strong> en la web de Supabase: <code class="text-xs">Project Settings > Team</code>.</div>
+                                    </div>
+                                    <div class="flex items-start p-2 rounded-md bg-gray-100 dark:bg-gray-700/50">
+                                        <div class="font-bold text-blue-600 dark:text-blue-400 mr-3">2.</div>
+                                        <div><strong>CIERRA SESIÓN</strong> en todos lados: en la web de Supabase y en la terminal con <code>supabase logout</code>.</div>
+                                    </div>
+                                    <div class="flex items-start p-2 rounded-md bg-gray-100 dark:bg-gray-700/50">
+                                        <div class="font-bold text-blue-600 dark:text-blue-400 mr-3">3.</div>
+                                        <div><strong>INICIA SESIÓN</strong> en la terminal con <code>supabase login</code> y en el navegador, selecciona <strong>explícitamente el correo del `Owner`</strong>.</div>
+                                    </div>
+                                    <div class="flex items-start p-2 rounded-md bg-gray-100 dark:bg-gray-700/50">
+                                        <div class="font-bold text-blue-600 dark:text-blue-400 mr-3">4.</div>
+                                        <div><strong>REINTENTA</strong> el comando <code>supabase link ...</code>. ¡Ahora funcionará!</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </li>
+                <!-- END NEW PERMISSION BLOCK -->
+
+                 <li class="flex items-start">
                     <input type="checkbox" id="step2-3" class="hidden step-checkbox">
                     <label for="step2-3" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Copiar Código.</strong> Reemplaza el contenido de <code>supabase/functions/get-odoo-sales/index.ts</code> y <code>supabase/functions/ask-gemini/index.ts</code> con los códigos que te proporcioné.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Paso 2.3: Preparar Entorno.</strong> En tu terminal, asegúrate de estar en la carpeta <code>mi-dashboard-backend</code>. Luego, vincula tu proyecto: <br> <code class="block mt-2 text-sm">cd ruta/a/mi-dashboard-backend</code> <br> <code class="block mt-1 text-sm">supabase link --project-ref ixhbgkimmzgfwehbbloa</code></div>
                     </label>
                 </li>
                  <li class="flex items-start">
                     <input type="checkbox" id="step2-4" class="hidden step-checkbox">
                     <label for="step2-4" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Verificar IDs de Compañía.</strong> Abre <code>get-odoo-sales/index.ts</code> y ajusta los IDs en <code>COMPANY_NAME_TO_ODOO_ID_MAP</code>.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Paso 2.4: Revisar IDs de Compañía.</strong> Abre el archivo <code>get-odoo-sales/index.ts</code> y ajusta los números en <code>COMPANY_NAME_TO_ODOO_ID_MAP</code> para que coincidan con los IDs de tu Odoo.</div>
                     </label>
                 </li>
                 <li class="flex items-start">
                     <input type="checkbox" id="step2-5" class="hidden step-checkbox">
                     <label for="step2-5" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Guardar Secretos (¡Crítico!).</strong> Ejecuta estos 5 comandos para guardar tus credenciales de forma segura: <br>
-                        <code class="block mt-2 text-sm">supabase secrets set ODOO_URL="..."</code> <br>
-                        <code class="block mt-1 text-sm">supabase secrets set ODOO_DB="..."</code> <br>
-                        <code class="block mt-1 text-sm">supabase secrets set ODOO_USER="..."</code> <br>
-                        <code class="block mt-1 text-sm">supabase secrets set ODOO_API_KEY="..."</code><br>
-                        <code class="block mt-1 font-bold text-sm">supabase secrets set GEMINI_API_KEY="..." # <-- ¡Añade tu clave de Gemini aquí!</code>
+                        <div class="step-text">
+                            <strong class="font-semibold text-gray-900 dark:text-white">Paso 2.5: Guardar Secretos.</strong> (¡Ya lo hiciste en la web, puedes saltar esto si quieres!). Si prefieres usar la terminal, ejecuta estos comandos. Recuerda pegar tu clave API de Odoo.
+                            <code class="block mt-2 text-sm">supabase secrets set ODOO_URL="https://vida.facturaclic.pe"</code>
+                            <code class="block mt-1 text-sm">supabase secrets set ODOO_DB="vida_master"</code>
+                            <code class="block mt-1 text-sm">supabase secrets set ODOO_USER="soporte@facturaclic.pe"</code>
+                            <code class="block mt-1 text-sm">supabase secrets set ODOO_API_KEY="[PEGA AQUÍ TU CLAVE API DE ODOO]"</code>
+                            <code class="block mt-1 font-bold text-sm">supabase secrets set GEMINI_API_KEY="AIzaSyBguCDSZtjoVJkziGNOawMm84YwBcLU56E"</code>
                         </div>
                     </label>
                 </li>
@@ -133,7 +169,7 @@
                     <input type="checkbox" id="step2-6" class="hidden step-checkbox">
                     <label for="step2-6" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Funciones.</strong> Despliega cada función por separado: <br>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Paso 2.6: Desplegar Funciones (El Paso Final).</strong> Despliega cada función por separado: <br>
                         <code class="block mt-2 text-sm">supabase functions deploy get-odoo-sales --no-verify-jwt</code> <br>
                         <code class="block mt-1 text-sm">supabase functions deploy ask-gemini --no-verify-jwt</code>
                         </div>
