@@ -1,10 +1,10 @@
 import { GoogleGenAI } from "@google/genai";
 import type { Company, SalesData } from '../types';
 
-// FIX: Update GoogleGenAI initialization to use process.env.API_KEY!
-// as required by the Gemini API coding guidelines. This resolves the TypeScript
-// error and ensures the API key is sourced correctly from the environment.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
+// Per Gemini API guidelines, the API key must be accessed from process.env.API_KEY.
+// The execution environment is responsible for making this variable available.
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+
 
 /**
  * Sends a user's query along with company and sales data to the Gemini API for analysis.
