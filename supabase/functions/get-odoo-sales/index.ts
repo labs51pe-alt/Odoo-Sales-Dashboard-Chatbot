@@ -3,23 +3,25 @@
 // It connects to your Odoo database using the secrets you've set.
 
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
-// FIX: Import Document and Element types to resolve errors with DOM parsing.
 import { DOMParser, type Document, type Element } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
 
-// FIX: Declare Deno to resolve "Cannot find name 'Deno'" errors.
-// This informs TypeScript that 'Deno' is a global variable provided by the Supabase Edge Function environment.
 declare const Deno: any;
 
 // =================================================================================
-// ACTION REQUIRED: I have updated this map based on your company list.
-// The numeric IDs (8, 2, 9, 4) were extracted from the 'id' column of your image.
-// Please verify these are correct.
+// ACTION REQUIRED: I have updated this map based on your complete company list.
+// The numeric IDs were extracted from the 'id' column of your provided data.
+// Please verify these are correct. After updating, you MUST re-deploy this function.
 // =================================================================================
 const COMPANY_NAME_TO_ODOO_ID_MAP: Record<string, number> = {
-    'botica-angie': 8,      // From __export__.res_company_8_...
-    'servilab-urubamba': 2, // From __export__.res_company_2_...
-    'botica-j-m': 9,        // From __export__.res_company_9_...
-    'bioplus-farma': 4,     // From __export__.res_company_4_...
+    'botica-angie': 8,
+    'servilab-urubamba': 2,
+    'baca-juarez': 3,
+    'botica-j-m': 9,
+    'bioplus-farma': 4,
+    'feet-care': 7,
+    'boticas-multifarma': 6,
+    'maripeya': 5,
+    'ferreteria-sac': 1, // Assumes 'base.main_company' has ID 1, a common Odoo default.
 };
 
 
@@ -173,13 +175,11 @@ function toXmlRpc(value: any): string {
 }
 
 function parseXmlRpcResponse(xml: string): any {
-    // FIX: Explicitly type `doc` to ensure `querySelector` is available.
     const doc: Document | null = new DOMParser().parseFromString(xml, "text/xml");
     const valueNode = doc?.querySelector("params param value");
     return valueNode ? parseValueNode(valueNode) : null;
 }
 
-// FIX: Type the `node` parameter as `Element` for better type safety.
 function parseValueNode(node: Element): any {
     const typeNode = node.firstElementChild;
     if (!typeNode) return null;
@@ -195,8 +195,6 @@ function parseValueNode(node: Element): any {
             const data = typeNode.querySelector("data");
             return Array.from(data?.querySelectorAll("value") || []).map(parseValueNode);
         case 'struct':
-            // FIX: Cast the result to Element[] to fix a type inference issue where items
-            // in the members array were being inferred as 'unknown'.
             const members = Array.from(typeNode?.querySelectorAll("member") || []) as Element[];
             const obj: Record<string, any> = {};
             for (const member of members) {

@@ -59,6 +59,9 @@ const TroubleshootingWizard: React.FC<{ error: string }> = ({ error }) => {
             <span>Verify Odoo Company IDs (The "Translator")</span>
           </h4>
           <div className="pl-11 mt-2 space-y-3 text-sm text-gray-500 dark:text-gray-400">
+             <div className="p-3 mb-3 text-sm text-blue-700 bg-blue-100 rounded-lg dark:bg-blue-900 dark:text-blue-300">
+                <strong>Note:</strong> I have already updated the code file with the IDs extracted from your company list image. Please quickly review the mapping, and if it looks correct, you can proceed directly to Step 3.
+            </div>
             <p>
               Your app uses simple names like <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">empresa-a</code>, but Odoo's database uses numbers (e.g., <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">1</code>, <code className="px-2 py-1 text-xs bg-gray-100 rounded dark:bg-gray-700">5</code>). The code in your Supabase function acts as a translator. You must tell it which number corresponds to which name.
             </p>
