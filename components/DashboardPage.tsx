@@ -2,6 +2,7 @@ import React from 'react';
 import { useAuth } from '../hooks/useAuth';
 import { useSalesData } from '../hooks/useSalesData';
 import { KpiCard } from './common/KpiCard';
+import FinalDiagnosticReport from './common/FinalDiagnosticReport';
 
 const DashboardPage: React.FC = () => {
   const { user } = useAuth();
@@ -31,12 +32,8 @@ const DashboardPage: React.FC = () => {
   }
 
   if (error) {
-    return (
-      <div className="p-4 text-center text-red-600 bg-red-100 border border-red-400 rounded-lg dark:bg-red-900 dark:text-red-200 dark:border-red-800">
-        <h3 className="font-bold">Error Loading Data</h3>
-        <p>{error}</p>
-      </div>
-    );
+    // If there is an error, render the new, interactive diagnostic tool.
+    return <FinalDiagnosticReport errorDetails={error} />;
   }
 
   if (!salesData || salesData.orderCount === 0) {
