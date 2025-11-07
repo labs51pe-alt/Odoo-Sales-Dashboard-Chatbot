@@ -12,13 +12,12 @@ export const SUPABASE_FUNCTION_BASE_URL = "https://ixhbgkimmzgfwehbbloa.supabase
 export const USE_MOCK_DATA = false;
 
 
-// ACTION: Updated company names for better personalization based on your domain.
-// You must still map these IDs ('empresa-a', etc.) to the correct
-// numeric IDs from your Odoo instance in the Supabase function's code.
+// ACTION: Updated company names to match the user's provided list from Odoo.
 export const COMPANIES: Company[] = [
-  { id: 'empresa-a', name: 'Vida SAC' },
-  { id: 'empresa-b', name: 'Facturaclic Peru' },
-  { id: 'empresa-c', name: 'Grupo Vida' },
+  { id: 'botica-angie', name: 'Botica Angie' },
+  { id: 'servilab-urubamba', name: 'SERVILAB URUBAMBA E.I.R.L.' },
+  { id: 'botica-j-m', name: 'BOTICA J & M FARMA S.A.C.' },
+  { id: 'bioplus-farma', name: 'BIOPLUS FARMA E.I.R.L.' },
 ];
 
 // ACTION: User data has been consolidated. This user can now access all listed companies.
@@ -26,7 +25,7 @@ export const USERS = [
   { 
     id: 'u1', 
     username: 'soporte@facturaclic.pe', 
-    allowedCompanyIds: ['empresa-a', 'empresa-b', 'empresa-c'] 
+    allowedCompanyIds: ['botica-angie', 'servilab-urubamba', 'botica-j-m', 'bioplus-farma'] 
   },
 ];
 

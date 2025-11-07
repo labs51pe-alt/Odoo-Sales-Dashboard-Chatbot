@@ -11,16 +11,15 @@ import { DOMParser, type Document, type Element } from "https://deno.land/x/deno
 declare const Deno: any;
 
 // =================================================================================
-// ACTION REQUIRED: Verify these Company IDs match your Odoo database.
-// This map translates the frontend company ID (e.g., 'empresa-a') to the
-// numeric ID used by Odoo.
-// How to find the ID in Odoo: Go to Settings -> Users & Companies -> Companies.
-// Click on a company and check the URL for `&id=X`. That X is the ID.
+// ACTION REQUIRED: I have updated this map based on your company list.
+// The numeric IDs (8, 2, 9, 4) were extracted from the 'id' column of your image.
+// Please verify these are correct.
 // =================================================================================
 const COMPANY_NAME_TO_ODOO_ID_MAP: Record<string, number> = {
-    'empresa-a': 1, // Replace 1 with the actual ID for 'Empresa A'
-    'empresa-b': 2, // Replace 2 with the actual ID for 'Empresa B'
-    'empresa-c': 3, // Replace 3 with the actual ID for 'Empresa C'
+    'botica-angie': 8,      // From __export__.res_company_8_...
+    'servilab-urubamba': 2, // From __export__.res_company_2_...
+    'botica-j-m': 9,        // From __export__.res_company_9_...
+    'bioplus-farma': 4,     // From __export__.res_company_4_...
 };
 
 
@@ -88,7 +87,7 @@ serve(async (req) => {
         }
 
         const odooCompanyId = COMPANY_NAME_TO_ODOO_ID_MAP[companyId];
-        if (!odooCompanyId) {
+        if (odooCompanyId === undefined) { // Check for undefined as ID 0 is valid.
             throw new Error(`No Odoo ID mapping found for company: ${companyId}`);
         }
 
