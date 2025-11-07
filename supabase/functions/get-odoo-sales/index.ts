@@ -8,9 +8,9 @@ import { DOMParser, type Document, type Element } from "https://deno.land/x/deno
 declare const Deno: any;
 
 // =================================================================================
-// ACTION REQUIRED: I have updated this map based on your complete company list.
+// ACTION REQUIRED: This map has been updated with your complete company list.
 // The numeric IDs were extracted from the 'id' column of your provided data.
-// Please verify these are correct. After updating, you MUST re-deploy this function.
+// After verifying these are correct, you MUST re-deploy this function.
 // =================================================================================
 const COMPANY_NAME_TO_ODOO_ID_MAP: Record<string, number> = {
     'botica-angie': 8,
