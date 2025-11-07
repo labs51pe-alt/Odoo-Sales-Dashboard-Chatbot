@@ -1,9 +1,7 @@
 import { GoogleGenAI } from "@google/genai";
 import type { Company, SalesData } from '../types';
 
-// FIX: Initialize the GoogleGenAI client.
-// According to the guidelines, the API key must be sourced from process.env.API_KEY.
-// It is assumed to be pre-configured and available in the execution environment.
+// FIX: Update GoogleGenAI initialization to use process.env.API_KEY per coding guidelines.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 /**

@@ -12,27 +12,25 @@ export const SUPABASE_FUNCTION_BASE_URL = "https://ixhbgkimmzgfwehbbloa.supabase
 export const USE_MOCK_DATA = false;
 
 
+// ACTION: Updated company names for better personalization based on your domain.
+// You must still map these IDs ('empresa-a', etc.) to the correct
+// numeric IDs from your Odoo instance in the Supabase function's code.
 export const COMPANIES: Company[] = [
-  { id: 'empresa-a', name: 'Empresa A (Innovate Corp)' },
-  { id: 'empresa-b', name: 'Empresa B (Quantum Solutions)' },
-  { id: 'empresa-c', name: 'Empresa C (Apex Dynamics)' },
+  { id: 'empresa-a', name: 'Vida SAC' },
+  { id: 'empresa-b', name: 'Facturaclic Peru' },
+  { id: 'empresa-c', name: 'Grupo Vida' },
 ];
 
+// ACTION: Configured the user you provided to be able to log into any company.
 export const USERS: User[] = [
-  { id: 'u1', username: 'juan.perez', companyId: 'empresa-a' },
-  { id: 'u2', username: 'ana.lopez', companyId: 'empresa-a' },
-  { id: 'u3', username: 'maria.gomez', companyId: 'empresa-b' },
-  { id: 'u4', username: 'pedro.sanchez', companyId: 'empresa-b' },
-  { id: 'u5', username: 'carlos.ruiz', companyId: 'empresa-c' },
+  { id: 'u1', username: 'soporte@facturaclic.pe', companyId: 'empresa-a' },
+  { id: 'u2', username: 'soporte@facturaclic.pe', companyId: 'empresa-b' },
+  { id: 'u3', username: 'soporte@facturaclic.pe', companyId: 'empresa-c' },
 ];
 
-// Passwords are mocked for demonstration purposes
+// ACTION: Set a simple password for the user to facilitate testing.
 export const USER_PASSWORDS: Record<string, string> = {
-  'juan.perez': 'demo123',
-  'ana.lopez': 'pass123',
-  'maria.gomez': 'demo456',
-  'pedro.sanchez': 'pass456',
-  'carlos.ruiz': 'demo789',
+  'soporte@facturaclic.pe': 'facturaclic123',
 };
 
 export const MOCK_SALES_DATA: Record<string, SalesData> = {
