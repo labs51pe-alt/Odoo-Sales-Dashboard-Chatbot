@@ -1,4 +1,4 @@
-import type { Company, User, SalesData } from './types';
+import type { Company, SalesData } from './types';
 
 // =================================================================================
 // ACTION: I have updated this URL to point to your Supabase project.
@@ -21,12 +21,15 @@ export const COMPANIES: Company[] = [
   { id: 'empresa-c', name: 'Grupo Vida' },
 ];
 
-// ACTION: Configured the user you provided to be able to log into any company.
-export const USERS: User[] = [
-  { id: 'u1', username: 'soporte@facturaclic.pe', companyId: 'empresa-a' },
-  { id: 'u2', username: 'soporte@facturaclic.pe', companyId: 'empresa-b' },
-  { id: 'u3', username: 'soporte@facturaclic.pe', companyId: 'empresa-c' },
+// ACTION: User data has been consolidated. This user can now access all listed companies.
+export const USERS = [
+  { 
+    id: 'u1', 
+    username: 'soporte@facturaclic.pe', 
+    allowedCompanyIds: ['empresa-a', 'empresa-b', 'empresa-c'] 
+  },
 ];
+
 
 // ACTION: Set a simple password for the user to facilitate testing.
 export const USER_PASSWORDS: Record<string, string> = {

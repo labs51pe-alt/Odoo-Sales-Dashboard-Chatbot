@@ -1,4 +1,3 @@
-
 import React, { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import type { User } from '../types';
 import { USERS, USER_PASSWORDS } from '../constants';
@@ -22,15 +21,28 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   }, []);
 
   const login = (username: string, password: string, companyId: string): boolean => {
-    const foundUser = USERS.find(
-      (u) => u.username === username && u.companyId === companyId
+    // Find user by their username from the consolidated user list.
+    const baseUser = USERS.find(
+      (u) => u.username === username.trim()
     );
 
-    if (foundUser && USER_PASSWORDS[username] === password) {
-      setUser(foundUser);
-      localStorage.setItem('odoo-user', JSON.stringify(foundUser));
+    // First, check if user exists and password is correct.
+    // Then, check if the selected company is in the user's allowed list.
+    if (baseUser && USER_PASSWORDS[baseUser.username] === password && baseUser.allowedCompanyIds.includes(companyId)) {
+      
+      // Construct the 'user' object for the session in the shape the app expects.
+      const sessionUser: User = {
+        id: baseUser.id,
+        username: baseUser.username,
+        companyId: companyId, // The company selected during login
+      };
+      
+      setUser(sessionUser);
+      localStorage.setItem('odoo-user', JSON.stringify(sessionUser));
       return true;
     }
+    
+    // If any check fails, login is unsuccessful.
     return false;
   };
 
