@@ -1,7 +1,9 @@
 import { GoogleGenAI } from "@google/genai";
 import type { Company, SalesData } from '../types';
 
-// FIX: Update GoogleGenAI initialization to use process.env.API_KEY per coding guidelines.
+// FIX: Update GoogleGenAI initialization to use process.env.API_KEY!
+// as required by the Gemini API coding guidelines. This resolves the TypeScript
+// error and ensures the API key is sourced correctly from the environment.
 const ai = new GoogleGenAI({ apiKey: process.env.API_KEY! });
 
 /**
@@ -17,7 +19,7 @@ export const askSalesAssistant = async (
   company: Company,
   salesData: SalesData
 ): Promise<string> => {
-  // FIX: Create a detailed system instruction to provide context to the AI model.
+  // Create a detailed system instruction to provide context to the AI model.
   const systemInstruction = `You are an expert sales data analyst and assistant for the company "${company.name}".
 Your role is to provide clear, concise, and insightful answers about the company's sales performance based on the JSON data provided.
 When asked about data, refer to the provided JSON. Do not invent or hallucinate data.
@@ -27,7 +29,7 @@ ${JSON.stringify(salesData, null, 2)}
 `;
 
   try {
-    // FIX: Call the Gemini API using ai.models.generateContent as per the guidelines.
+    // Call the Gemini API using ai.models.generateContent as per the guidelines.
     const response = await ai.models.generateContent({
       // Using 'gemini-2.5-flash' as it is recommended for basic text tasks.
       model: "gemini-2.5-flash",
@@ -37,7 +39,7 @@ ${JSON.stringify(salesData, null, 2)}
       },
     });
 
-    // FIX: Extract the response text directly from the .text property as per guidelines.
+    // Extract the response text directly from the .text property as per guidelines.
     return response.text;
   } catch (error) {
     console.error("Error communicating with the Gemini API:", error);
