@@ -1,62 +1,70 @@
 // supabase/functions/check-secrets/index.ts
+
 import { serve } from "https://deno.land/std@0.177.0/http/server.ts";
 
+// Supabase provides the 'Deno' global object in its Edge Function environment.
 declare const Deno: any;
 
-const createCorsHeaders = () => ({
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-});
-
-// List of companies provided in the app's constants.
-// In a real app, this might come from a database or another central config.
-const COMPANY_IDS = [
-  'botica-angie', 'servilab-urubamba', 'baca-juarez', 'botica-j-m',
-  'bioplus-farma', 'feet-care', 'boticas-multifarma', 'maripeya', 'ferreteria-sac'
-];
+interface SecretStatus {
+  name: string;
+  isSet: boolean;
+  description: string;
+}
 
 serve(async (req) => {
+  // Standard CORS preflight handling.
   if (req.method === 'OPTIONS') {
-    return new Response('ok', { headers: createCorsHeaders() });
+    return new Response('ok', {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+      }
+    });
   }
 
   try {
-    const checks: { secret: string; status: 'SET' | 'MISSING' }[] = [];
+    // List of secrets the application expects to be set.
+    const secretsToCheck = [
+      {
+        name: "GEMINI_API_KEY",
+        description: "Required for the AI Sales Assistant feature."
+      },
+      {
+        name: "ODOO_URL",
+        description: "Required for fetching sales data from Odoo. (Not used in mock data mode)."
+      },
+      {
+        name: "ODOO_DB",
+        description: "Required for fetching sales data from Odoo. (Not used in mock data mode)."
+      },
+      {
+        name: "ODOO_USER",
+        description: "Required for fetching sales data from Odoo. (Not used in mock data mode)."
+      },
+      {
+        name: "ODOO_PASSWORD",
+        description: "Required for fetching sales data from Odoo. (Not used in mock data mode)."
+      },
+    ];
 
-    // 1. Check for Gemini API Key
-    const geminiKey = Deno.env.get("GEMINI_API_KEY");
-    checks.push({
-      secret: "GEMINI_API_KEY",
-      status: geminiKey ? 'SET' : 'MISSING',
-    });
+    const results: SecretStatus[] = secretsToCheck.map(secret => ({
+      name: secret.name,
+      // Deno.env.get() returns the value or undefined. We convert it to a boolean.
+      isSet: !!Deno.env.get(secret.name),
+      description: secret.description,
+    }));
     
-    // 2. Check Odoo credentials for each company
-    COMPANY_IDS.forEach(companyId => {
-      const odooSecrets = [
-        `ODOO_URL_${companyId}`,
-        `ODOO_DB_${companyId}`,
-        `ODOO_USER_${companyId}`,
-        `ODOO_PASSWORD_${companyId}`
-      ];
-      
-      odooSecrets.forEach(secretName => {
-        const secretValue = Deno.env.get(secretName);
-        checks.push({
-          secret: secretName,
-          status: secretValue ? 'SET' : 'MISSING',
-        });
-      });
-    });
-
-    return new Response(JSON.stringify({ checks }), {
-      headers: { ...createCorsHeaders(), 'Content-Type': 'application/json' },
+    return new Response(JSON.stringify(results), {
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
+      status: 200,
     });
 
   } catch (error) {
     console.error("Function Error:", error);
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { ...createCorsHeaders(), 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*' },
     });
   }
 });
