@@ -96,32 +96,36 @@
                     <input type="checkbox" id="step2-2" class="hidden step-checkbox">
                     <label for="step2-2" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Crear Función.</strong> Ejecuta <code>supabase functions new get-odoo-sales</code>.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Crear Funciones.</strong> Ejecuta estos dos comandos para crear la estructura de ambas funciones: <br>
+                        <code class="block mt-2 text-sm">supabase functions new get-odoo-sales</code>
+                        <code class="block mt-1 text-sm">supabase functions new ask-gemini</code>
+                        </div>
                     </label>
                 </li>
                 <li class="flex items-start">
                     <input type="checkbox" id="step2-3" class="hidden step-checkbox">
                     <label for="step2-3" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Copiar Código.</strong> Reemplaza el contenido de <code>supabase/functions/get-odoo-sales/index.ts</code> con el código que te proporcioné.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Copiar Código.</strong> Reemplaza el contenido de <code>supabase/functions/get-odoo-sales/index.ts</code> y <code>supabase/functions/ask-gemini/index.ts</code> con los códigos que te proporcioné.</div>
                     </label>
                 </li>
                  <li class="flex items-start">
                     <input type="checkbox" id="step2-4" class="hidden step-checkbox">
                     <label for="step2-4" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Verificar IDs de Compañía.</strong> Abre <code>index.ts</code> y ajusta los números en <code>COMPANY_NAME_TO_ODOO_ID_MAP</code> para que coincidan con los IDs reales de las compañías en tu Odoo.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Verificar IDs de Compañía.</strong> Abre <code>get-odoo-sales/index.ts</code> y ajusta los IDs en <code>COMPANY_NAME_TO_ODOO_ID_MAP</code>.</div>
                     </label>
                 </li>
                 <li class="flex items-start">
                     <input type="checkbox" id="step2-5" class="hidden step-checkbox">
                     <label for="step2-5" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Guardar Secretos (¡Crítico!).</strong> Ejecuta estos 4 comandos en tu terminal para guardar tus credenciales de Odoo de forma segura: <br>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Guardar Secretos (¡Crítico!).</strong> Ejecuta estos 5 comandos para guardar tus credenciales de forma segura: <br>
                         <code class="block mt-2 text-sm">supabase secrets set ODOO_URL="..."</code> <br>
                         <code class="block mt-1 text-sm">supabase secrets set ODOO_DB="..."</code> <br>
                         <code class="block mt-1 text-sm">supabase secrets set ODOO_USER="..."</code> <br>
-                        <code class="block mt-1 text-sm">supabase secrets set ODOO_API_KEY="..."</code>
+                        <code class="block mt-1 text-sm">supabase secrets set ODOO_API_KEY="..."</code><br>
+                        <code class="block mt-1 font-bold text-sm">supabase secrets set GEMINI_API_KEY="..." # <-- ¡Añade tu clave de Gemini aquí!</code>
                         </div>
                     </label>
                 </li>
@@ -129,7 +133,10 @@
                     <input type="checkbox" id="step2-6" class="hidden step-checkbox">
                     <label for="step2-6" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Función.</strong> Ejecuta <code>supabase functions deploy get-odoo-sales --no-verify-jwt</code>.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Funciones.</strong> Despliega cada función por separado: <br>
+                        <code class="block mt-2 text-sm">supabase functions deploy get-odoo-sales --no-verify-jwt</code> <br>
+                        <code class="block mt-1 text-sm">supabase functions deploy ask-gemini --no-verify-jwt</code>
+                        </div>
                     </label>
                 </li>
             </ul>
@@ -141,40 +148,29 @@
                  <div class="bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 font-bold rounded-full w-8 h-8 flex items-center justify-center">3</div>
                 Fase 3: Despliegue del Frontend en Vercel
             </h2>
+             <div class="p-4 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400" role="alert">
+              <span class="font-medium">¡Buenas noticias!</span> Ya no necesitas configurar variables de entorno en Vercel. La clave API de Gemini ahora está segura en Supabase.
+            </div>
             <ul class="space-y-4">
                 <li class="flex items-start">
                     <input type="checkbox" id="step3-1" class="hidden step-checkbox">
                     <label for="step3-1" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Subir a GitHub.</strong> Crea un repositorio en GitHub y sube todos los archivos de tu aplicación frontend.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Subir a GitHub.</strong> Asegúrate de que todos los cambios (incluida la nueva función <code>ask-gemini</code>) estén subidos a tu repositorio de GitHub.</div>
                     </label>
                 </li>
                  <li class="flex items-start">
                     <input type="checkbox" id="step3-2" class="hidden step-checkbox">
                     <label for="step3-2" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Importar en Vercel.</strong> Inicia sesión en Vercel, crea un nuevo proyecto e importa tu repositorio de GitHub.</div>
-                    </label>
-                </li>
-                <li class="flex items-start">
-                    <input type="checkbox" id="step3-3" class="hidden step-checkbox">
-                    <label for="step3-3" class="flex items-start cursor-pointer">
-                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Configurar Clave API de Gemini (¡Corrección Importante!).</strong> En la configuración de tu proyecto en Vercel, ve a <code class="text-sm">Settings > Environment Variables</code>. Añade una nueva variable con el nombre <code>API_KEY</code> y pega tu clave API de Google Gemini. <strong>Importante:</strong> El nombre debe ser exactamente <code>API_KEY</code>, sin ningún prefijo como <code>VITE_</code>. El entorno de ejecución se encarga de inyectar esta variable de forma segura.</div>
-                    </label>
-                </li>
-                 <li class="flex items-start">
-                    <input type="checkbox" id="step3-4" class="hidden step-checkbox">
-                    <label for="step3-4" class="flex items-start cursor-pointer">
-                        <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Desplegar Frontend.</strong> Haz clic en el botón <code class="text-sm">Deploy</code> en Vercel.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">Revisar Despliegue en Vercel.</strong> Vercel debería redesplegar automáticamente tu sitio al detectar los cambios en GitHub. Si no, puedes iniciar un redespliegue manualmente.</div>
                     </label>
                 </li>
                 <li class="flex items-start">
                     <input type="checkbox" id="step3-5" class="hidden step-checkbox">
                     <label for="step3-5" class="flex items-start cursor-pointer">
                         <div class="step-icon w-6 h-6 flex-shrink-0 mt-1 mr-4 flex items-center justify-center border-2 rounded-md border-gray-300 dark:border-gray-600 transition-all">✓</div>
-                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">¡Probar todo!</strong> Abre la URL de Vercel, inicia sesión y verifica que el dashboard muestre datos reales de Odoo y que el Asistente IA responda a tus preguntas.</div>
+                        <div class="step-text"><strong class="font-semibold text-gray-900 dark:text-white">¡Probar todo!</strong> Abre la URL de Vercel, inicia sesión y verifica que el dashboard y el Asistente IA funcionen correctamente.</div>
                     </label>
                 </li>
             </ul>
@@ -184,7 +180,7 @@
         <footer class="text-center mt-12">
             <div class="p-8 bg-green-100 dark:bg-green-900/50 rounded-2xl">
                  <h3 class="text-2xl font-bold text-green-800 dark:text-green-300">¡Felicitaciones!</h3>
-                 <p class="mt-2 text-green-700 dark:text-green-400">Si has marcado todas las casillas, tu dashboard está en vivo y conectado. ¡Excelente trabajo!</p>
+                 <p class="mt-2 text-green-700 dark:text-green-400">Si has marcado todas las casillas, tu dashboard está en vivo, conectado y seguro. ¡Excelente trabajo!</p>
             </div>
         </footer>
 

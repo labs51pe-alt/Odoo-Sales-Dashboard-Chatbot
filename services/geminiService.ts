@@ -1,13 +1,14 @@
-import { GoogleGenAI } from "@google/genai";
 import type { Company, SalesData } from '../types';
 
-// Per Gemini API guidelines, the API key must be accessed from process.env.API_KEY.
-// The execution environment is responsible for making this variable available.
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// The Gemini API call is now proxied through a secure Supabase Edge Function.
+// The API key is stored securely as a Supabase secret and is never exposed to the browser.
+// NOTE: We derive the new function URL from the existing constant to minimize file changes.
+const ASK_ASSISTANT_URL = "https://ixhbgkimmzgfwehbbloa.supabase.co/functions/v1/ask-gemini";
 
 
 /**
- * Sends a user's query along with company and sales data to the Gemini API for analysis.
+ * Sends a user's query along with company and sales data to a secure backend function.
+ * This function then calls the Gemini API for analysis.
  *
  * @param userInput The user's question about the sales data.
  * @param company The company for which the data is being analyzed.
@@ -19,30 +20,25 @@ export const askSalesAssistant = async (
   company: Company,
   salesData: SalesData
 ): Promise<string> => {
-  // Create a detailed system instruction to provide context to the AI model.
-  const systemInstruction = `You are an expert sales data analyst and assistant for the company "${company.name}".
-Your role is to provide clear, concise, and insightful answers about the company's sales performance based on the JSON data provided.
-When asked about data, refer to the provided JSON. Do not invent or hallucinate data.
-Format your answers in a user-friendly way. Use Markdown for lists, bolding, and italics where appropriate to improve readability.
-Analyze the following sales data:
-${JSON.stringify(salesData, null, 2)}
-`;
-
   try {
-    // Call the Gemini API using ai.models.generateContent as per the guidelines.
-    const response = await ai.models.generateContent({
-      // Using 'gemini-2.5-flash' as it is recommended for basic text tasks.
-      model: "gemini-2.5-flash",
-      contents: userInput,
-      config: {
-        systemInstruction: systemInstruction,
+    const response = await fetch(ASK_ASSISTANT_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ userInput, company, salesData }),
     });
 
-    // Extract the response text directly from the .text property as per guidelines.
-    return response.text;
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.error || `Failed to get a response from the AI assistant.`);
+    }
+
+    const data = await response.json();
+    return data.text;
+
   } catch (error) {
-    console.error("Error communicating with the Gemini API:", error);
+    console.error("Error communicating with the AI assistant function:", error);
     // Propagate a user-friendly error to be handled by the calling component.
     throw new Error("Failed to get a response from the AI assistant. Please try again later.");
   }
